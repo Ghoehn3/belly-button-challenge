@@ -6,7 +6,20 @@ d3.json("https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1
     let dataset = d3.select("#selDataset").node().value;
     let metadata = data.metadata.filter(sample => sample.id == dataset)[0];
     console.log(metadata);
+    //create chart
+    createchart(data, dataset);
+
+
+
+
+
+//create chart
+function createchart(data, id) {
+    let dataset = d3.select("#selDataset").node().value;
+    let metadata = data.metadata.filter(sample => sample.id == dataset)[0];
+    console.log(metadata);
     //read in the wfreq value for the gauge chart
+
     let wfreq = metadata.wfreq;
     console.log(wfreq);
     //create the gauge chart
@@ -43,8 +56,17 @@ d3.json("https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1
         margin: { t: 0, b: 0 }
     };
     Plotly.newPlot("gauge", gaugeData, gaugeLayout);
-    }
-);
+    };
 
 
 
+});
+
+//update the charts when a new sample is selected
+function optionChanged() {
+    d3.json("samples.json").then(function(data) {
+        let dataset = d3.select("#selDataset").node().value;
+        createchart(data, dataset);
+        createMetadata(data, dataset);
+    });
+}
